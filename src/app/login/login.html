@@ -1,0 +1,40 @@
+<div class="head">
+  <mat-toolbar color="primary">
+    <span>Login</span>
+  </mat-toolbar>
+</div>
+
+<form [formGroup]="loginForm" class="form" (ngSubmit)="logar()">
+  <!-- Campo de E-mail -->
+  <mat-form-field class="we" appearance="fill">
+    <mat-label>Informe o e-mail</mat-label>
+    <input matInput placeholder="pat@example.com" formControlName="email" required>
+    
+    <!-- Nova sintaxe @if do Angular moderno -->
+    @if (email.invalid) {
+      <mat-error>{{ getErrorMessageEmail() }}</mat-error>
+    }
+  </mat-form-field>
+
+  <!-- Campo de Senha -->
+  <mat-form-field class="we" appearance="fill">
+    <mat-label>Informe a senha</mat-label>
+    <!-- Uso do Signal 'hide()' para controlar o tipo do input -->
+    <input matInput [type]="hide() ? 'password' : 'text'" formControlName="senha" required>
+    
+    @if (senha.invalid) {
+      <mat-error>{{ getErrorMessageSenha() }}</mat-error>
+    }
+
+    <!-- Clique que altera o valor do Signal hide.set() -->
+    <button type="button" mat-icon-button matSuffix (click)="hide.set(!hide())" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide()">
+      <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <!-- Botões de Ação -->
+  <div class="actions">
+    <button type="submit" mat-raised-button class="we" color="primary" [disabled]="loginForm.invalid">Entrar</button>
+    <a routerLink="/cliente/cadastrar" mat-raised-button class="we">Criar conta</a>
+  </div>
+</form>
