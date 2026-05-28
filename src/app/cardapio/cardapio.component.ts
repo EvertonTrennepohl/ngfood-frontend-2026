@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { Produto } from '../models/produto.model';
-import { CardapioService } from './cardapio.service'; // Certifique-se de importar o CardapioService
+import { CardapioService } from './cardapio.service';
 
 @Component({
   selector: 'app-cardapio',
