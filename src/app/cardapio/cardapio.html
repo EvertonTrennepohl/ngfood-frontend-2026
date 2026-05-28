@@ -1,1 +1,59 @@
-<p>cardapio works!</p>
+<div class="header">
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>
+      <span>Cardápio</span>
+    </mat-toolbar-row>
+    <mat-toolbar-row>
+      <mat-icon
+        [matBadge]="pedidoService.quantidadeTotal"
+        matBadgeColor="accent"
+        >shopping_cart</mat-icon
+      >
+      <span class="flex-1"></span>
+      <a mat-button routerLink="/pedido">VER PEDIDO</a>
+      <span class="flex-1"></span>
+      <span>R$ {{ pedidoService.valorTotal | number: "0.2-2" }}</span>
+    </mat-toolbar-row>
+  </mat-toolbar>
+</div>
+
+<!-- 1. Estado de Carregamento da API no Render -->
+@if (isCarregando()) {
+  <div class="mensagem-status">
+    <p>Carregando cardápio... (O servidor do Render leva até 1 minuto para acordar)</p>
+  </div>
+}
+
+<!-- 2. Tratamento de Erros de Conexão (ex: Erro 403 / CORS) -->
+@if (possuiErro()) {
+  <div class="mensagem-erro">
+    <p>Não foi possível carregar os produtos. Verifique a conexão com o servidor.</p>
+  </div>
+}
+
+<!-- 3. Listagem do Cardápio utilizando a nova sintaxe @for do Angular 21 -->
+@if (!isCarregando() && !possuiErro()) {
+  <mat-action-list>
+    @for (produto of produtos(); track produto.id; let i = $index) {
+      
+      <!-- Cabeçalho de Categoria Dinâmico -->
+      @if (i === 0 || produto.categoria !== produtos()[i - 1].categoria) {
+        <h2 matSubheader>
+          {{ produto.categoria | uppercase }}
+        </h2>
+      }
+
+      <!-- Item do Cardápio -->
+      <mat-list-item (click)="pedidoService.adicionaProduto(produto)">
+        <span class="flex-1">{{ produto.descricao }}</span>
+        <span class="fs-small">R$ {{ produto.preco | number: "0.2-2" }}</span>
+      </mat-list-item>
+
+    } @empty {
+      <!-- Caso a API do Render responda com uma lista vazia -->
+      <div class="mensagem-vazia">
+        <p>Nenhum produto disponível no cardápio no momento.</p>
+      </div>
+    }
+  </mat-action-list>
+}
