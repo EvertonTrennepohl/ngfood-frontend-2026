@@ -9,7 +9,7 @@ import { Produto } from '../models/produto.model'; // Ajustado para seguir o pad
 })
 export class CardapioService {
   private http = inject(HttpClient);
-  private apiUrl = `${environment.apiUrl}/produtos`; // Endpoint centralizado
+  private apiUrl = `${environment.apiUrl}/cardapio`; // Endpoint centralizado
 
   // Responsabilidade única: Buscar produtos do banco
   buscaProdutos(): Observable<Produto[]> {
